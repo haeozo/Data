@@ -1,9 +1,8 @@
+import csv
 import os
 from pathlib import Path
 
 from charset_normalizer import from_bytes
-
-file_path = "data/raw/top_podcasts.csv"
 
 
 def get_file_size(file_path):
@@ -25,6 +24,37 @@ def detect_encoding(file_path):
                 return None
         return result.encoding
 
-print(f"Размер файла: {get_file_size(file_path):.2f} МБ")
-print(f"Формат файла : {get_file_format(file_path)}")
+
+def read_first_rows(file_path, encoding, rows_count=100):
+    with open(file_path, "r", encoding=encoding, newline="") as file:
+        reader = csv.reader(file)
+
+        for row_number, row in enumerate(reader):
+            if row_number >= rows_count:
+                break
+
+            print(row)
+
+
+def get_columns(file_path, encoding):
+    with open(file_path, "r", encoding=encoding, newline="") as file:
+
+        reader = csv.reader(file)
+
+        return next(reader)
+
+def create_debug_slice(file_path, output_path, encoding, rows_count=200_000):
+    with (
+        open(file_path, "r", encoding=encoding, newline="") as source_file,
+        open(output_path, "w", encoding=encoding, newline="") as output_file,
+    ):
+        reader = csv.reader(source_file)
+        writer = csv.writer(output_file)
+
+        for row_number, row in enumerate(reader):
+            if row_number >= rows_count:
+                break
+
+            writer.writerow(row)
+
 
