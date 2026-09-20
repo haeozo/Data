@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from io_utils import (
     create_debug_slice,
     detect_encoding,
