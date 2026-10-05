@@ -29,4 +29,7 @@ DATA_SCHEMA = {
     "duration_ms": "int32",
     "explicit": "boolean",
     "languages": "category",
+    "release_date": "datetime",
+    "show.media_type": "category",
+    "show.total_episodes": "Int32"
 }
