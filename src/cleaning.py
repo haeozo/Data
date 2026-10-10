@@ -25,7 +25,7 @@ def load_data():
     return pd.read_csv(DEBUG_DATA_PATH)
 
 
-def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
+def clean_column_names(df):
     df = df.copy()
     old = list(df.columns)
     new = []
@@ -179,7 +179,6 @@ def clean_text(df, col="description"):
 
 def normalize_numeric_units(df):
     # duration_ms уже в миллисекундах
-    log_step("normalize_numeric_units", len(df))
     return df
 
 
