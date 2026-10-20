@@ -3,7 +3,7 @@ import re
 
 import pandas as pd
 
-from .config import DEBUG_DATA_PATH, PROCESSED_DIR, RAW_DATA_PATH
+from .config import PROCESSED_DIR, RAW_DATA_PATH
 
 logging.basicConfig(
     filename=PROCESSED_DIR / "cleaning.log",
@@ -18,11 +18,10 @@ logger = logging.getLogger(__name__)
 def log_step(name, processed, changed=0, removed=0):
     msg = f"{name} | processed={processed} | changed={changed} | removed={removed}"
     logger.info(msg)
-    print(msg)
 
 
 def load_data():
-    return pd.read_csv(DEBUG_DATA_PATH)
+    return pd.read_csv(RAW_DATA_PATH)
 
 
 def clean_column_names(df):
