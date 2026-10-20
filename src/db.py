@@ -35,7 +35,7 @@ print("\nЗапуск способа 1: Пакетная вставка (to_sql)
 start_time = time.time()
 
 try:
-  # Очищаем таблицы перед тестом (обернули запрос в text())
+  # Очищаем таблицы перед тестом 
   with engine.begin() as conn:
     conn.execute(
         text(
@@ -53,9 +53,10 @@ try:
           "show_media_type",
           "show_total_episodes",
       ]
-  ].drop_duplicates(subset=["show_uri"])
+  ].dropna(subset=["show_uri", "show_name"]).drop_duplicates(subset=["show_uri"])
   shows_df.to_sql("shows", engine, if_exists="append", index=False, chunksize=5000)
-
+  valid_show_uris = set(shows_df["show_uri"])
+ 
   episodes_df = df[
       [
           "episode_uri",
@@ -68,15 +69,15 @@ try:
           "release_date",
       ]
   ].drop_duplicates(subset=["episode_uri"])
-  episodes_df["explicit"] = episodes_df["explicit"].astype(
-      bool
-  )  
+  episodes_df = episodes_df[episodes_df["show_uri"].isin(valid_show_uris)].copy()
+  episodes_df["explicit"] = episodes_df["explicit"].fillna(False).astype(bool)  
   episodes_df.to_sql(
       "episodes", engine, if_exists="append", index=False, chunksize=5000
   )
-
+  valid_episode_uris = set(episodes_df["episode_uri"])
 
   chart_df = df[["date", "region", "rank", "chart_rank_move", "episode_uri"]]
+  chart_df = chart_df[chart_df["episode_uri"].isin(valid_episode_uris)]
   chart_df.to_sql(
       "chart_records", engine, if_exists="append", index=False, chunksize=5000
   )
