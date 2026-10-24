@@ -19,7 +19,6 @@ from src.cleaning import (
 )
 from src.config import DEBUG_DATA_PATH, PROCESSED_DIR, RAW_DATA_PATH
 
-
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(
     filename=PROCESSED_DIR / "pipeline.log",
@@ -117,6 +116,6 @@ if __name__ == "__main__":
     if args.output:
         out_path = Path(args.output)
     else:
-        out_path = PROCESSED_DIR / "clean.parquet"
+        out_path = PROCESSED_DIR / "clean_cli.parquet"
 
     run_pipeline(in_path, out_path, step=args.step)
